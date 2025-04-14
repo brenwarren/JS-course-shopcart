@@ -35,8 +35,8 @@ function findProductInCart(productId) {
 }
 
 /* Function addProductToCart takes in the product productId as an argument
-  - addProductToCart should get the correct product based on the productId
-  - addProductToCart should then increase the product's quantity
+  - addProductToCart gets the correct product based on the productId
+  - addProductToCart increases the product's quantity
   - if the product is not already in the cart, add it to the cart
 */
 
