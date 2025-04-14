@@ -25,13 +25,22 @@ const products = [
 
 const cart = [];
 
+/* Function findProductInCart takes in the productId as an argument
+  - findProductInCart should return the product from the cart based on the productId
+*/
+
+// Finds a product in the cart by productId
+function findProductInCart(productId) {
+  return cart.find(product => product.productId === productId);
+}
+
 /* Function addProductToCart takes in the product productId as an argument
   - addProductToCart should get the correct product based on the productId
   - addProductToCart should then increase the product's quantity
   - if the product is not already in the cart, add it to the cart
 */
 
-/* Function to add a product to the cart */
+// Adds a product to the cart or increases its quantity if it already exists
 function addProductToCart(productId) {
   const product = products.find(item => item.productId === productId);
   const existingProduct = findProductInCart(productId);
@@ -114,17 +123,12 @@ function emptyCart() {
   - pay will return a positive number if money should be returned to customer
 */
 
+let remainingBalance = 0;
+
 function pay(amount) {
   const totalCost = cartTotal();
-  return amount - totalCost; // Returns the difference between amount paid and total cost
-}
-
-/* Function findProductInCart takes in the productId as an argument
-  - findProductInCart should return the product from the cart based on the productId
-*/
-
-function findProductInCart(productId) {
-  return cart.find(product => product.productId === productId);
+  remainingBalance = amount - totalCost;
+  return remainingBalance;
 }
 
 /* Place stand out suggestions here (stand out suggestions can be found at the bottom of the project rubric.)*/
@@ -144,8 +148,8 @@ module.exports = {
   decreaseQuantity,
   removeProductFromCart,
   cartTotal,
-  pay, 
+  pay,
   emptyCart,
-  /* Uncomment the following line if completing the currency converter bonus */
-  // currency
-}
+  findProductInCart,
+  remainingBalance,
+};
