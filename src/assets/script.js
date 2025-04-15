@@ -98,14 +98,15 @@ function emptyCart() {
   - pay will return a positive number if money should be returned to customer
 */
 
-let remainingBalance = 0;
+let totalPaid = 0; // Global variable to track the total amount paid
 
 function pay(amount) {
-  remainingBalance += amount; // Add the paid amount to the global remainingBalance
-  let remaining = remainingBalance - cartTotal(); // Calculate the difference between remainingBalance and cartTotal()
+  totalPaid += amount; // Add the paid amount to the totalPaid variable
+  let remaining = totalPaid - cartTotal(); // Calculate the difference between totalPaid and cartTotal()
 
   if (remaining >= 0) {
-    remainingBalance = 0; // Reset remainingBalance if the cart is fully paid
+    totalPaid = 0; // Reset totalPaid if the cart is fully paid
+    emptyCart(); // Clear the cart to reset cartTotal() to 0
   }
 
   return remaining; // Return the remaining amount
