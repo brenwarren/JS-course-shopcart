@@ -1,43 +1,22 @@
-/* Array named products used to add all of product object literals that are created in the next step. */
-
-/* Create 3 product objects:
-   Each product has five properties
-   - name: name of product (string)
-   - price: price of product (number)
-   - quantity: quantity in cart should start at zero (number)
-   - productId: unique id for the product (number)
-   - image: picture of product (url string)
-*/
-
-/* Images provided in /images folder. All images from Unsplash.com
-   - cherry.jpg by Mae Mu
-   - orange.jpg by Mae Mu
-   - strawberry.jpg by Allec Gomes
-*/
+/* Initial Products array used to add all of product object literals that are created in the next step. */
 
 const products = [
-  { name: "Cherries", price: 2, quantity: 20, productId: 1001, image: "images/cherry.jpg" },
-  { name: "Oranges", price: 3, quantity: 20, productId: 1002, image: "images/orange.jpg" },
-  { name: "Strawberries", price: 1, quantity: 20, productId: 1003, image: "images/strawberry.jpg"}
+  { name: "Cherries", price: 2, quantity: 0, productId: 1001, image: "images/cherry.jpg" },
+  { name: "Oranges", price: 3, quantity: 0, productId: 1002, image: "images/orange.jpg" },
+  { name: "Strawberries", price: 1, quantity: 0, productId: 1003, image: "images/strawberry.jpg" }
 ];
 
 /* Declare an empty array named cart to hold the items in the cart */
 
 const cart = [];
 
-/* Function findProductInCart takes in the productId as an argument
-  - findProductInCart should return the product from the cart based on the productId
-*/
-
 // Finds a product in the cart by productId
 function findProductInCart(productId) {
   return cart.find(product => product.productId === productId);
 }
 
-/* Function addProductToCart takes in the product productId as an argument
-  - addProductToCart gets the correct product based on the productId
-  - addProductToCart increases the product's quantity
-  - if the product is not already in the cart, add it to the cart
+/* Function addProductToCart takes in the product productId as an argument, gets the correct product based on the productId,
+ increases the product's quantity. If the product is not already in the cart, add it to the cart
 */
 
 // Adds a product to the cart or increases its quantity if it already exists
@@ -48,13 +27,12 @@ function addProductToCart(productId) {
   if (existingProduct) {
     existingProduct.quantity++;
   } else {
-    cart.push({ ...product, quantity: 1 });
+    product.quantity = 1; // Set the initial quantity for the product
+    cart.push(product);   // Push the product reference directly into the cart
   }
 }
 
 /* Function increaseQuantity takes in the productId as an argument
-  - increaseQuantity should get the correct product based on the productId
-  - increaseQuantity should then increase the product's quantity
 */
 
 function increaseQuantity(productId) {
@@ -65,40 +43,37 @@ function increaseQuantity(productId) {
 }
 
 /* Function decreaseQuantity takes in the productId as an argument
-  - decreaseQuantity should get the correct product based on the productId
-  - decreaseQuantity should decrease the quantity of the product
+  - decreaseQuantity gets product based on the productId and decreases the quantity of the product
   - if the function decreases the quantity to 0, the product is removed from the cart
 */
 
 function decreaseQuantity(productId) {
-  const productIndex = cart.findIndex(product => product.productId === productId);
+  const product = findProductInCart(productId); // Use helper function to find the product
 
-  if (productIndex > -1) {
-    cart[productIndex].quantity--;
+  if (product) {
+    product.quantity--; // Decrease the quantity
 
-    if (cart[productIndex].quantity === 0) {
-      cart.splice(productIndex, 1);
+    if (product.quantity === 0) {
+      removeProductFromCart(productId); // Call the dedicated function to remove the product
     }
   }
 }
 
 /* Function removeProductFromCart takes in the productId as an argument
-  - removeProductFromCart should get the correct product based on the productId
-  - removeProductFromCart should update the product quantity to 0
-  - removeProductFromCart should remove the product from the cart
+  - removeProductFromCart gets product based on the productId and updates the product quantity to 0
 */
 
 function removeProductFromCart(productId) {
   const productIndex = cart.findIndex(product => product.productId === productId);
 
   if (productIndex > -1) {
-    cart.splice(productIndex, 1);
+    cart[productIndex].quantity = 0; // Reset the product's quantity to 0
+    cart.splice(productIndex, 1);   // Remove the product from the cart
   }
 }
 
 /* Function cartTotal
-  - cartTotal should iterate through the cart to get the total of all products
-  - cartTotal should return the sum of the products in the cart
+  - Iterates through the cart to get the total of all products and returns the sum of the products in the cart
 */
 
 function cartTotal() {
@@ -126,10 +101,27 @@ function emptyCart() {
 let remainingBalance = 0;
 
 function pay(amount) {
-  const totalCost = cartTotal();
-  remainingBalance = amount - totalCost;
-  return remainingBalance;
+  remainingBalance += amount; // Add the paid amount to the global remainingBalance
+  let remaining = remainingBalance - cartTotal(); // Calculate the difference between remainingBalance and cartTotal()
+
+  if (remaining >= 0) {
+    remainingBalance = 0; // Reset remainingBalance if the cart is fully paid
+  }
+
+  return remaining; // Return the remaining amount
 }
+
+module.exports = {
+  products,
+  cart,
+  addProductToCart,
+  increaseQuantity,
+  decreaseQuantity,
+  removeProductFromCart,
+  cartTotal,
+  emptyCart,
+  pay
+};
 
 
 
